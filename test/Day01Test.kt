@@ -5,23 +5,11 @@ import kotlin.test.assertEquals
 
 class Day01Test {
 
-
     @Test
-    fun plus() {
-        val freq = freq("+1, +1, +1")
-        assertEquals(3, freq)
-    }
-
-    @Test
-    fun min() {
-        val freq = freq("-1, -2, -3")
-        assertEquals(-6, freq)
-    }
-
-    @Test
-    fun combination() {
-        val freq = freq("+1, +1, -2")
-        assertEquals(0, freq)
+    fun freq() {
+        assertEquals(3, freq("+1, +1, +1"))
+        assertEquals(-6, freq("-1, -2, -3"))
+        assertEquals(0, freq("+1, +1, -2"))
     }
 
     @Test
