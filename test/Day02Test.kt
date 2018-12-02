@@ -28,4 +28,28 @@ internal class Day02Test {
         val input = Files.readAllLines(Paths.get("test", "day02"))
         println(checksum(input))
     }
+
+    @Test
+    internal fun diffCount() {
+        assertEquals(2, diffCount("abcde", "axcye"))
+        assertEquals(1, diffCount("fghij", "fguij"))
+    }
+
+    @Test
+    internal fun diffString() {
+        assertEquals("fgij", diff("fghij", "fguij"))
+    }
+
+    @Test
+    internal fun diff() {
+        assertEquals("fgij", diff(listOf("abcde",
+                "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz")
+        ))
+    }
+
+    @Test
+    internal fun puzzleDiff() {
+        val input = Files.readAllLines(Paths.get("test", "day02"))
+        println(diff(input))
+    }
 }
