@@ -1,10 +1,10 @@
-fun freq(input: String): Int {
-    val parts = input.split(", ")
-    return freq(parts, 0)
+internal fun freq(input: List<String>): Int {
+    return freq(input, 0)
 }
 
-fun freq(input: List<String>): Int {
-    return freq(input, 0)
+internal fun freq(input: String): Int {
+    val parts = input.split(", ")
+    return freq(parts, 0)
 }
 
 private fun freq(parts: List<String>, acc: Int): Int {
@@ -20,12 +20,13 @@ private fun freq(parts: List<String>, acc: Int): Int {
         }
     }
 }
-fun double(input: String): Int {
+
+internal fun double(input: String): Int {
     val parts = input.split(", ")
     return double(parts)
 }
 
-fun double(input: List<String>): Int {
+internal fun double(input: List<String>): Int {
     return double(input, 0, mutableSetOf(0), input)
 }
 

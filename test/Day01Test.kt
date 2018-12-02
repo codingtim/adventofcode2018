@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class Day01Test {
 
     @Test
-    fun freq() {
+    internal fun freq() {
         assertEquals(3, freq("+1, +1, +1"))
         assertEquals(-6, freq("-1, -2, -3"))
         assertEquals(0, freq("+1, +1, -2"))
@@ -28,7 +28,7 @@ class Day01Test {
 
     @Test
     internal fun puzzleDouble() {
-        val input = Files.readAllLines(Paths.get("test", "day012"))
+        val input = Files.readAllLines(Paths.get("test", "day01"))
         println(double(input))
     }
 }
