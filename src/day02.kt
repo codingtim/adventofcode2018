@@ -5,7 +5,7 @@ internal fun checksum(input: List<String>): Int {
 }
 
 internal fun checksum(input: CharArray): Pair<Int, Int> {
-    val map: MutableMap<Char, Int> = input.fold(mutableMapOf()) { map, c ->
+    val map: Map<Char, Int> = input.fold(mutableMapOf()) { map, c ->
         map.compute(c) { _, count -> if (count == null) 1 else count + 1 }
         map
     }
