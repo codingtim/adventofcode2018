@@ -15,13 +15,11 @@ private fun totalSleep(sleeps: List<Sleep>): Int {
 internal fun findMinuteMostSleptWithFrequency(guard: Guard): Pair<Int, Int> {
     val map: MutableMap<Int, Int> = mutableMapOf()
     //TODO better more kotlin way to do this?
-    guard.sleeps.map { (_, from, until) -> IntRange(from, until) }
-            .forEach { range ->
-                range.asIterable().forEach { i ->
-                    map.compute(i) { _, count -> if (count == null) 1 else count + 1 }
-                }
+    guard.sleeps.flatMap { (_, from, until) -> IntRange(from, until) }
+            .forEach { i ->
+                map.compute(i) { _, count -> if (count == null) 1 else count + 1 }
             }
-    return map.toList().sortedBy { (_, count) ->  -count }.first()
+    return map.toList().sortedBy { (_, count) -> -count }.first()
 }
 
 internal fun parse(input: List<String>): List<Guard> {
