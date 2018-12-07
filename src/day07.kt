@@ -10,11 +10,12 @@ data class Step(val name: String, val requiredSteps: List<String>) {
     fun stepTaken(step: Step) = Step(name, requiredSteps.filter { it != step.name })
 }
 
+private fun takeStep(step: Step, tail: List<Step>): List<Step> {
+    return tail.map { it.stepTaken(step) }
+            .sortedWith(StepComparator)
+}
+
 internal fun solveSteps(input: List<Step>): String {
-    fun takeStep(step: Step, tail: List<Step>): List<Step> {
-        return tail.map { it.stepTaken(step) }
-                .sortedWith(StepComparator)
-    }
     tailrec fun solveSteps(input: List<Step>, result: String): String {
         return if(input.isEmpty()) {
             result
@@ -24,6 +25,27 @@ internal fun solveSteps(input: List<Step>): String {
         }
     }
     return solveSteps(input, "")
+}
+
+internal fun solveStepsConcurrent(input: List<Step>, workers: Int, timeNeeded: (String) -> (Int)): Int {
+    tailrec fun solveStepsConcurrent(input: List<Step>, working: List<Pair<Int, Step>>, result: Int): Int {
+        return if (input.isEmpty() && working.isEmpty()) {
+            result
+        } else {
+            return if (working.size < workers && !input.isEmpty() && input.head.requiredSteps.isEmpty()) {
+                solveStepsConcurrent(input.tail, working + Pair(result + timeNeeded(input.head.name), input.head), result)
+            } else {
+                val stepsDone = working.filter { (finishedAt, _) -> finishedAt == result }.toList()
+                val steps = stepsDone.fold(input) { acc, (_, step) -> takeStep(step, acc) }
+                solveStepsConcurrent(
+                        steps,
+                        working.filter { (finishedAt, _) -> finishedAt > result },
+                        result + 1
+                )
+            }
+        }
+    }
+    return solveStepsConcurrent(input, listOf(), 0)
 }
 
 internal fun parseSteps(input: List<String>): List<Step> {

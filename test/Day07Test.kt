@@ -25,23 +25,36 @@ internal class Day07Test {
         ), result)
     }
 
+    private val exampleInput = listOf(
+            Step("C", listOf()),
+            Step("A", listOf("C")),
+            Step("B", listOf("A")),
+            Step("D", listOf("A")),
+            Step("F", listOf("C")),
+            Step("E", listOf("F", "D", "B"))
+    )
+
     @Test
     internal fun solveTest() {
-        val input = listOf(
-                Step("C", listOf()),
-                Step("A", listOf("C")),
-                Step("B", listOf("A")),
-                Step("D", listOf("A")),
-                Step("F", listOf("C")),
-                Step("E", listOf("F", "D", "B"))
-        )
-        assertEquals(solveSteps(input), "CABDFE")
+        assertEquals(solveSteps(exampleInput), "CABDFE")
+    }
+
+    @Test
+    internal fun solveStepsConcurrentTest() {
+        val range = CharRange('A', 'Z')
+        assertEquals(15, solveStepsConcurrent(exampleInput, 2) { s -> range.indexOf(s.first())})
     }
 
     @Test
     internal fun puzzle() {
         //TODO compose these functions?
         println(solveSteps(parseSteps(getInput())))
+    }
+
+    @Test
+    internal fun puzzleConcurrent() {
+        val range = CharRange('A', 'Z')
+        println(solveStepsConcurrent(parseSteps(getInput()), 5){ s -> 60 + range.indexOf(s.first())})
     }
 
     private fun getInput(): List<String> {
