@@ -60,4 +60,20 @@ internal class Day07Test {
     private fun getInput(): List<String> {
         return Files.readAllLines(Paths.get("test", "day07"))
     }
+
+
+    private fun parseSteps(input: List<String>): List<Step> {
+        return input.mapNotNull { Regex("Step (.) must be finished before step (.) can begin.").matchEntire(it) }
+                .flatMap { listOf(
+                        Step(it.destructured.component1(), listOf()),
+                        Step(it.destructured.component2(), listOf(it.destructured.component1()))
+                )}
+                .fold(mutableMapOf<String, Step>()) {map, step ->
+                    map.compute(step.name) {_, s -> step.join(s)}
+                    map
+                }
+                .values
+                .toList()
+                .sortedWith(StepComparator)
+    }
 }

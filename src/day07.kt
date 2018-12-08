@@ -48,22 +48,7 @@ internal fun solveStepsConcurrent(input: List<Step>, workers: Int, timeNeeded: (
     return solveStepsConcurrent(input, listOf(), 0)
 }
 
-internal fun parseSteps(input: List<String>): List<Step> {
-    return input.mapNotNull { Regex("Step (.) must be finished before step (.) can begin.").matchEntire(it) }
-            .flatMap { listOf(
-                    Step(it.destructured.component1(), listOf()),
-                    Step(it.destructured.component2(), listOf(it.destructured.component1()))
-            )}
-            .fold(mutableMapOf<String, Step>()) {map, step ->
-                map.compute(step.name) {_, s -> step.join(s)}
-                map
-            }
-            .values
-            .toList()
-            .sortedWith(StepComparator)
-}
-
-private object StepComparator: Comparator<Step> {
+internal object StepComparator: Comparator<Step> {
     override fun compare(step1: Step, step2: Step): Int {
         val sizeDiff = step1.requiredSteps.size.compareTo(step2.requiredSteps.size)
         return if (sizeDiff == 0) step1.name.compareTo(step2.name) else sizeDiff

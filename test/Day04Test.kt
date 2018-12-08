@@ -97,4 +97,36 @@ internal class Day04Test {
         lines.sort()
         return parse(lines)
     }
+
+    private fun parse(input: List<String>): List<Guard> {
+        val regex = Regex("(.*) Guard #(.*?) begins shift")
+        val sleepRegex = Regex("\\[(.*?) (.*?):(.*?)] (falls|wakes)(.*)")
+        val iterator = input.iterator()
+
+        var s = iterator.next()
+        val matchResult = regex.matchEntire(s)!!
+        var guardId = Integer.parseInt(matchResult.destructured.component2())
+        val map: MutableMap<Int, Guard> = mutableMapOf()
+        while (iterator.hasNext()) {
+            s = iterator.next()
+            val sleepMatch = sleepRegex.matchEntire(s)
+            if (sleepMatch?.value == s) {
+                val date = sleepMatch.destructured.component1()
+                val from = Integer.parseInt(sleepMatch.destructured.component3())
+                val to = Integer.parseInt(sleepRegex.matchEntire(iterator.next())!!.destructured.component3())
+                if(map.containsKey(guardId)) {
+                    val guard = map[guardId]
+                    map[guardId] = Guard(guardId, guard!!.sleeps.plus(Sleep(date, from, to)))
+                } else {
+                    map[guardId] = Guard(guardId, mutableListOf(Sleep(date, from, to)))
+                }
+            } else {
+                val regexResult = regex.matchEntire(s)
+                if (regexResult?.value == s) {
+                    guardId = Integer.parseInt(regexResult.destructured.component2())
+                }
+            }
+        }
+        return map.values.toList()
+    }
 }
