@@ -11,3 +11,15 @@ sealed class TreeNode {
 }
 
 internal fun sumMetadata(tree: TreeNode) = traverse(tree) { metadata: List<Int> -> metadata.sum() }
+
+internal fun rootNodeValue(tree: TreeNode): Int {
+    return when (tree) {
+        is TreeNode.Leaf -> tree.metadata.sum()
+        is TreeNode.Node -> tree.metadata
+                    .filter { it != 0 }
+                    .filter { it <= tree.children.size }
+                    .map { it -> tree.children[it - 1] }
+                    .map { rootNodeValue(it) }
+                    .sum()
+    }
+}

@@ -5,42 +5,44 @@ import kotlin.test.assertEquals
 
 internal class Day08Test {
 
+    private val tree = TreeNode.Node(
+            listOf(
+                    TreeNode.Leaf(listOf(10, 11, 12)),
+                    TreeNode.Node(
+                            listOf<TreeNode>(TreeNode.Leaf(listOf(99))),
+                            listOf(2)
+                    )
+            ),
+            listOf(1, 1, 2)
+    )
+
     @Test
     internal fun metadataSumTest() {
-        val tree = TreeNode.Node(
-                listOf(
-                        TreeNode.Leaf(listOf(10, 11, 12)),
-                        TreeNode.Node(
-                                listOf<TreeNode>(TreeNode.Leaf(listOf(99))),
-                                listOf(2)
-                        )
-                ),
-                listOf(1, 1, 2)
-        )
         val result = sumMetadata(tree)
         assertEquals(138, result)
     }
 
     @Test
     internal fun parseTest() {
-        val tree = TreeNode.Node(
-                listOf(
-                        TreeNode.Leaf(listOf(10, 11, 12)),
-                        TreeNode.Node(
-                                listOf<TreeNode>(TreeNode.Leaf(listOf(99))),
-                                listOf(2)
-                        )
-                ),
-                listOf(1, 1, 2)
-        )
         assertEquals(tree, parse("2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2"))
     }
 
     @Test
     internal fun puzzle() {
-        val input = Files.readAllLines(Paths.get("test", "day08"))[0]
-        println(sumMetadata(parse(input)))
+        println(sumMetadata(parse(getInput())))
     }
+
+    @Test
+    internal fun rootNodeValueTest() {
+        assertEquals(66, rootNodeValue(tree))
+    }
+
+    @Test
+    internal fun puzzleTwo() {
+        println(rootNodeValue(parse(getInput())))
+    }
+
+    private fun getInput() = Files.readAllLines(Paths.get("test", "day08"))[0]
 
     private fun parse(input: String): TreeNode {
         val iterator = input.split(" ").map { s -> Integer.valueOf(s) }.iterator()
