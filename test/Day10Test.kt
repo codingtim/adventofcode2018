@@ -41,7 +41,8 @@ internal class Day10Test {
                 "position=<-3,  6> velocity=< 2, -1>"
         )
         val result = findMessage(parse(input), 8)
-        printMessage(result)
+        assertEquals(3, result.second)
+        printMessage(result.first)
     }
 
     @Test
@@ -76,7 +77,9 @@ internal class Day10Test {
     @Test
     internal fun puzzle() {
         val points = parse(getInput())
-        printMessage(findMessage(points, 15))
+        val result = findMessage(points, 15)
+        println(result.second)
+        printMessage(result.first)
     }
 
     private fun getInput() = Files.readAllLines(Paths.get("test", "day10"))

@@ -4,11 +4,11 @@ internal data class MovingPoint(val x: Int, val y: Int, val vx: Int, val vy: Int
     fun move(): MovingPoint = copy(x = x + vx, y = y + vy)
 }
 
-internal fun findMessage(points: List<MovingPoint>, square: Int): List<MovingPoint> {
-    tailrec fun findMessage(seconds: Int, currentPoints: List<MovingPoint>): List<MovingPoint> {
+internal fun findMessage(points: List<MovingPoint>, square: Int): Pair<List<MovingPoint>, Int> {
+    tailrec fun findMessage(seconds: Int, currentPoints: List<MovingPoint>): Pair<List<MovingPoint>, Int> {
         val ys = currentPoints.map { it.y }
         val currentSquare = (ys.min()!! - ys.max()!!).absoluteValue
-        return if (currentSquare <= square) currentPoints else findMessage(seconds + 1, currentPoints.map { it.move() })
+        return if (currentSquare <= square) Pair(currentPoints, seconds) else findMessage(seconds + 1, currentPoints.map { it.move() })
     }
     return findMessage(0, points)
 }
