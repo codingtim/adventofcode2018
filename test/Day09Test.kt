@@ -17,4 +17,20 @@ internal class Day09Test {
     internal fun puzzle(){
         println(maxMarbleScore(455, 71223))
     }
+
+    @Test
+    internal fun marbleCircleTest() {
+        val marbleCircle = MarbleCircle()
+        assertEquals(listOf(0), marbleCircle.toList())
+        marbleCircle.insert(1)
+        assertEquals(listOf(0, 1), marbleCircle.toList())
+        marbleCircle.insert(2)
+        assertEquals(listOf(0, 2, 1), marbleCircle.toList())
+        marbleCircle.insert(3)
+        assertEquals(listOf(0, 2, 1, 3), marbleCircle.toList())
+        marbleCircle.insert(4)
+        assertEquals(listOf(0, 4, 2, 1, 3), marbleCircle.toList())
+        marbleCircle.insert(5)
+        assertEquals(listOf(0, 4, 2, 5, 1, 3), marbleCircle.toList())
+    }
 }

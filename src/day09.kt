@@ -46,3 +46,46 @@ internal fun maxMarbleScore(players: Int, maxMarble: Int): Int {
             .sorted()
             .last()
 }
+
+internal class MarbleCircle {
+
+    var current: Marble = Marble(0)
+
+    data class Marble(val value: Int) {
+        var clockwise: Marble = this
+        var counterClockWise: Marble = this
+
+        constructor(value: Int, marbleClockWise: Marble, marbleCounterClockWise: Marble) : this(value) {
+            clockwise = marbleClockWise
+            counterClockWise = marbleCounterClockWise
+        }
+    }
+
+    fun insert(value: Int) {
+        val marble = Marble(value, current.clockwise.clockwise, current.clockwise)
+        marble.clockwise.counterClockWise = marble
+        marble.counterClockWise.clockwise = marble
+        current = marble
+    }
+
+    fun toList(): List<Int> {
+        var m = current
+        var zero: Marble? = null
+        for(i in 0..current.value) {
+            if(m.value == 0) {
+                zero = m
+                break
+            }
+            else m = m.clockwise
+        }
+        fun toList(marble: Marble, acc: MutableList<Int>): List<Int> {
+            return if(marble == zero) acc
+            else {
+                acc.add(marble.value)
+                toList(marble.clockwise, acc)
+            }
+        }
+        return toList(zero!!.clockwise, mutableListOf(zero.value))
+    }
+
+}
