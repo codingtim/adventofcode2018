@@ -68,10 +68,26 @@ internal class MarbleCircle {
         current = marble
     }
 
+    fun removeCurrent(): Int {
+        val r = current
+        val counterClockWise = current.counterClockWise
+        val clockwise = current.clockwise
+        counterClockWise.clockwise = clockwise
+        clockwise.counterClockWise = counterClockWise
+        current = clockwise
+        return r.value
+    }
+
+    fun moveCounterClockWise(steps: Int) {
+        for(i in 1..steps) {
+            current = current.counterClockWise
+        }
+    }
+
     fun toList(): List<Int> {
         var m = current
-        var zero: Marble? = null
-        for(i in 0..current.value) {
+        val zero: Marble?
+        while(true) {
             if(m.value == 0) {
                 zero = m
                 break

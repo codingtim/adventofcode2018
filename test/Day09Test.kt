@@ -33,4 +33,25 @@ internal class Day09Test {
         marbleCircle.insert(5)
         assertEquals(listOf(0, 4, 2, 5, 1, 3), marbleCircle.toList())
     }
+
+    @Test
+    internal fun testRemoveCurrent() {
+        val marbleCircle = MarbleCircle()
+        for(i in 1..5) {
+            marbleCircle.insert(i)
+        }
+        assertEquals(5, marbleCircle.removeCurrent())
+        assertEquals(listOf(0, 4, 2, 1, 3), marbleCircle.toList())
+    }
+
+    @Test
+    internal fun testMoveCounterClockWise() {
+        val marbleCircle = MarbleCircle()
+        for(i in 1..5) {
+            marbleCircle.insert(i)
+        }
+        marbleCircle.moveCounterClockWise(2)
+        assertEquals(4, marbleCircle.removeCurrent())
+        assertEquals(listOf(0, 2, 5, 1, 3), marbleCircle.toList())
+    }
 }
