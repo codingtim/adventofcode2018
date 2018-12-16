@@ -1,4 +1,4 @@
-private fun marbles(players: Int, max: Int): List<Pair<Int, Int>> {
+internal fun marbles(players: Int, max: Int): List<Pair<Int, Int>> {
     tailrec fun marbles(currentPlayer: Int, currentMarbleIndex: Int, marble: Int, circle: List<Int>, points: List<Pair<Int, Int>>): List<Pair<Int, Int>> {
         if (marble == max + 1) return points
         if(marble % 23 == 0) {
@@ -36,10 +36,36 @@ private fun marbles(players: Int, max: Int): List<Pair<Int, Int>> {
     return marbles(0, 0, 1, listOf(0), listOf())
 }
 
-internal fun maxMarbleScore(players: Int, maxMarble: Int): Int {
-    return marbles(players, maxMarble)
-            .fold(mutableMapOf<Int, Int>()) { acc, pair ->
-                acc.compute(pair.first) { _, count -> if (count == null) pair.second else count + pair.second }
+internal fun marblesState(players: Int, max: Int): List<Pair<Int, Int>> {
+    tailrec fun marblesState(currentPlayer: Int, marble: Int, circle: MarbleCircle, points: List<Pair<Int, Int>>): List<Pair<Int, Int>> {
+        if (marble == max + 1) return points
+        if(marble % 23 == 0) {
+            circle.moveCounterClockWise(7)
+            val removedMarble = circle.removeCurrent()
+            val p = Pair(currentPlayer, marble + removedMarble)
+            return marblesState(
+                    if(currentPlayer + 1 == players) 0 else currentPlayer + 1,
+                    marble + 1,
+                    circle,
+                    points + p
+            )
+        } else {
+            circle.insert(marble)
+            return marblesState(
+                    if(currentPlayer + 1 == players) 0 else currentPlayer + 1,
+                    marble + 1,
+                    circle,
+                    points
+            )
+        }
+    }
+    return marblesState(0, 1, MarbleCircle(), listOf())
+}
+
+internal fun maxMarbleScore(players: Int, maxMarble: Int, f: ((Int, Int) -> List<Pair<Int, Int>>)): Long {
+    return f(players, maxMarble)
+            .fold(mutableMapOf<Int, Long>()) { acc, pair ->
+                acc.compute(pair.first) { _, count -> if (count == null) pair.second.toLong() else count + pair.second }
                 acc
             }
             .values
